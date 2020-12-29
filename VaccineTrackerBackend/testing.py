@@ -22,21 +22,19 @@ def convert_date(date):
 		if x in date:
 			month = str(i+1); 
 			new_date=date_2+"/"+str(i+1)
-			if "ana" in date:
+			if "and" in date:
 				print(month)
 				x = date.split(" ")
-				x = month+"/"+x[1]+" & "+month+"/"+x[3]
+				x = x[1]+"/"+month+" & "+x[3]+"/"+month
 				x = x.replace(",", "")
 				print(x)
 				return x
 			return new_date 		
-	# check of ana is in the string thx quebec government December 24 aNA 25, 2020
 
 
 
 # path to chromedriver: 
 option = webdriver.ChromeOptions()
-option.add_argument(" -- incognito")
 option.add_argument('--headless')
 browser = webdriver.Chrome(executable_path='/Users/shereenelaidi/Desktop/webdev/vaccine-tracker/VaccineTrackerBackend/chromedriver', options=option)
 browser.get("https://www.quebec.ca/en/health/health-issues/a-z/2019-coronavirus/situation-coronavirus-in-quebec/")
@@ -51,8 +49,25 @@ div = soup.find(id="csv-display-synthese-evolution-donnees-en")
 div2 = div.find("table")
 entry1 = div2.find("tbody")
 entry2 = entry1.findAll("tr")
+
+
+# since the quebec government only displays data for the 7 most recent
+# days, we need to save them into an external text file. 
+
+# open the vaccine_data.txt file 
+database = open('vaccine_data.txt', "r+")
+# print(database.read())
+database_read = database.readlines()
+
+# making the arrays to store the vaccine data
 vaccine_totals = np.array([0])
 vaccine_dates = ["December 19, 2020"]
+
+for i in range(len(database_read)):
+
+
+
+
 # now iterate through all of the elements of entry2 and save them into a list
 for day in entry2:
 	# extract the row for the current day
@@ -74,6 +89,8 @@ for day in entry2:
 	vaccine_totals = np.append(vaccine_totals, int_total)
 	vaccine_dates.append(day)
 
+
+
 print(vaccine_totals)
 vaccine_totals = vaccine_totals.astype(int)
 print(vaccine_totals)
@@ -93,8 +110,8 @@ plt.yscale = "linear"
 plt.title("COVID-19 Vaccination Data in Quebec")
 plt.ylabel("Doses administered")
 plt.xlabel("Dates")
-plt.show()
-# show the plot
+# plt.show()
+
 
 
 
