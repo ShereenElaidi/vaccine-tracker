@@ -1,0 +1,33 @@
+<!DOCTYPE HTML>
+
+<html>
+	<head>
+		<title>Hello there {{user}}</title>
+    <style>
+      body {
+        max-width: 400px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+      }
+      p, button {
+        font-size: 20px;
+        margin-top: 20px;
+      }
+      p span {
+        color: blue;
+      }
+    </style>
+	</head>
+	<body>
+		<p>
+      Welcome to your personal page,
+      <span>{{user}}</span>.
+    </p>
+		<a href="/page">
+			<button>Another page?!</button>
+		</a>
+	</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE HTML>
+
+<html>
+	<head>
+		<title>Page? Maybe?</title>
+    <style>
+      body {
+        max-width: 400px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+      }
+      p, form {
+        font-size: 20px;
+        margin-top: 20px;
+      }
+      img {
+        width: 300px;
+        margin: 10px;
+      }
+      p span {
+        color: blue;
+      }
+    </style>
+	</head>
+	<body>
+		<p>Wait this isn't a page! Error {{code}}!</p>
+		<br />
+		<img src="https://http.cat/{{code}}">
+		<br />
+		<form action="/user">
+			<input type="text" placeholder="username" name="username"></input>
+			<input type="submit" value="go to your shelter"></input>
+		</form>
+	</body>
+</html>
