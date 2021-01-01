@@ -4,14 +4,14 @@ window.addEventListener('load', () => {
   // let button = document.getElementById("hello"); 
   // button.addEventListener("click", handleClick);
   let plot = document.getElementById('tableauOverflow');
-  plot.src = 'https://backendv4.shereenelaidi.repl.co/data.png?t=' + Date.now();
+  plot.src = 'http://0.0.0.0:8080/data.png?t=' + Date.now();
 });
 
 
 async function handleClick () {
   console.log("function handleClick"); 
   // fetch("https://backendv4.shereenelaidi.repl.co").then(result => result.text()).then
-  let result = await fetch("https://backendv4.shereenelaidi.repl.co/");
+  let result = await fetch("http://0.0.0.0:8080/");
   let text = await result.json(); 
   console.log(text); 
   total.textContent = text; 

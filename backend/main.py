@@ -7,13 +7,23 @@ import matplotlib.pyplot as plt
 import math 
 import io
 import time
+import re
 import atexit
 from apscheduler.schedulers.background import BackgroundScheduler
+
+# fix for my computer :(, since the background wasn't working locally for me
+
+plt.rcParams.update({
+    "figure.facecolor":  (0.0, 0.0, 0.0, 0.0),  # red   with alpha = 30%
+    "axes.facecolor":    (0.0, 0.0, 0.0, 0.0),  # green with alpha = 50%
+    "savefig.facecolor": (0.0, 0.0, 0.0, 0.0),  # blue  with alpha = 20%
+})
+
 
 
 DATA_URL = 'https://cdn-contenu.quebec.ca/cdn-contenu/sante/documents/Problemes_de_sante/covid-19/csv/synthese-7jours-en.csv'
 
-
+# plt.ioff() #IMPORTANT DO NOT REMOVE
 # Reads from api and outputs result
 def get_new_data(address):
   r = requests.get(address, allow_redirects=True)
@@ -62,6 +72,7 @@ def index():
   return response 
 
 def scheduled_update():
+  print("scheduled process running")
   # a function to convert the date from MONTH DAY, YEAR to DD/MM
   def convert_date(date):
     date = date.lower()
@@ -146,7 +157,9 @@ def scheduled_update():
   for entry in data:
     dates.append(entry[0])
     # remove the space between the numbers 
-    curr_dose = entry[1].replace(" ", "")
+    curr_dose = entry[1]
+    curr_dose = re.sub('\s+', '', curr_dose)
+    
     doses = np.append(doses, curr_dose)
 
   # append the new list to the existing data  
@@ -188,8 +201,7 @@ def scheduled_update():
     fig.set_size_inches(6, 3)
     ax.bar(dates, vaccine_totals, color = '#39ff14')
     # ax.set_ylim(n) 
-    fig.set_facecolor('#222222')
-    ax.set_facecolor('#222222')
+    # fig.patch.set_facecolor('#222222')
     ax.tick_params(color='white', labelcolor='white')
     for spine in ax.spines.values():
       spine.set_edgecolor(WHITE)
@@ -200,16 +212,17 @@ def scheduled_update():
     ax.set_xticks(list(map(lambda x : dates[x], range(0,len(dates),5))))
     ax.set_ylabel("Doses administered")
     ax.set_xlabel("Dates")
+    # fig.set_facecolor('#222222')
+    # ax.set_facecolor('#222222')
     if (download_plot == True):
-      plt.savefig("data.png", bbox_inches = 'tight', pad_inches = 0.05, dpi=160)
+      plt.savefig("data.png", bbox_inches = 'tight', pad_inches = 0.05, dpi=150)
     return 
     
-  plt.ioff()
   plot_vaccine(merged_totals, merged_dates, True)
   
 
 scheduler = BackgroundScheduler()
-scheduler.add_job(scheduled_update,'interval',minutes=1)
+scheduler.add_job(scheduled_update,'interval',seconds=30)
 scheduler.start()
 atexit.register(lambda: scheduler.shutdown(wait=False))
 
@@ -222,5 +235,4 @@ def hello():
 
 
 web_site.run(host='0.0.0.0', port=8080)
-
 
