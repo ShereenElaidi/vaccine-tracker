@@ -14,9 +14,9 @@ from apscheduler.schedulers.background import BackgroundScheduler
 # fix for my computer :(, since the background wasn't working locally for me
 
 plt.rcParams.update({
-    "figure.facecolor":  (0.0, 0.0, 0.0, 0.0),  # red   with alpha = 30%
-    "axes.facecolor":    (0.0, 0.0, 0.0, 0.0),  # green with alpha = 50%
-    "savefig.facecolor": (0.0, 0.0, 0.0, 0.0),  # blue  with alpha = 20%
+    "figure.facecolor":  (0.0, 0.0, 0.0, 0.0),  
+    "axes.facecolor":    (0.0, 0.0, 0.0, 0.0),  
+    "savefig.facecolor": (0.0, 0.0, 0.0, 0.0),  
 })
 
 
