@@ -218,6 +218,8 @@ def scheduled_update():
     if (download_plot == True):
       plt.savefig("data.png", bbox_inches = 'tight', pad_inches = 0.05, dpi=150)
     return 
+    # close the plot
+    plt.close('all')
     
   plot_vaccine(merged_totals, merged_dates, True)
   
