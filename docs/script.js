@@ -22,6 +22,7 @@ window.addEventListener('load', () => {
   // plot.src = 'http://0.0.0.0:8080/data.png?t=' + Date.now();
   plot.src = 'http://117.9.121.34.bc.googleusercontent.com/data.png?t=' + Date.now();
   plot.onload = updateCount;
+  document.body.click();
 });
 
 
