@@ -15,7 +15,7 @@ if (location.protocol === "https:") {
 window.addEventListener('load', () => {
   console.log('The page has fully loaded');
   handleClick() 
-  document.fonts.ready.then(updateCount);
+  document.fonts.onloadingdone = updateCount;
   // let button = document.getElementById("hello"); 
   // button.addEventListener("click", handleClick);
   let plot = document.getElementById('tableauOverflow');
