@@ -199,6 +199,7 @@ def scheduled_update():
     n = vaccine_totals.max()
     # yticks = np.arange(0, n, 500)
     fig.set_size_inches(6, 3)
+    # ax.bar(dates, vaccine_totals, color = '#39ff14')
     ax.bar(dates, vaccine_totals, color = '#39ff14')
     # ax.set_ylim(n) 
     # fig.patch.set_facecolor('#222222')

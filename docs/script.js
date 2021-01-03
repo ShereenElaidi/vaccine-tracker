@@ -17,6 +17,7 @@ async function handleClick () {
   console.log("function handleClick"); 
   // fetch("https://backendv4.shereenelaidi.repl.co").then(result => result.text()).then
   let result = await fetch("http://34.121.9.117");
+  // let result = await fetch("http://0.0.0.0:8080")
   let text = await result.json(); 
   console.log(text); 
   total.textContent = text; 
