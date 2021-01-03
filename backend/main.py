@@ -34,7 +34,7 @@ def get_new_data(address):
   data = [[line.split(';')[0],line.split(';')[-1]] for line in f.split("\n")][1:-1]
   return data
 
-print(get_new_data(DATA_URL))
+# print(get_new_data(DATA_URL))
 
 web_site = Flask(__name__) # server object
 
