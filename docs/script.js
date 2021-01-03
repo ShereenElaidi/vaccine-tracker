@@ -1,6 +1,7 @@
 if (location.protocol === "https:") {
-  location.href = "http://"+location.hostname + "/vaccine-tracker"; 
+  location.href = "http://" + location.hostname + "/vaccine-tracker"; 
 } 
+
 
 window.addEventListener('load', () => {
   console.log('The page has fully loaded');
@@ -10,6 +11,7 @@ window.addEventListener('load', () => {
   let plot = document.getElementById('tableauOverflow');
   // plot.src = 'http://0.0.0.0:8080/data.png?t=' + Date.now();
   plot.src = 'http://117.9.121.34.bc.googleusercontent.com/data.png?t=' + Date.now();
+  plot.onload = () => document.querySelector('main').hidden = false;
 });
 
 
@@ -22,7 +24,3 @@ async function handleClick () {
   console.log(text); 
   total.textContent = text; 
 }
-
-
-
-
