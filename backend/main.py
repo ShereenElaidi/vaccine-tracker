@@ -169,12 +169,17 @@ def scheduled_update():
 
   # populate the dates list
   for entry in data:
-    dates.append(entry[0])
-    # remove the space between the numbers 
-    curr_dose = entry[1]
-    curr_dose = re.sub('\s+', '', curr_dose)
-    
-    doses = np.append(doses, curr_dose)
+    # put in try-catch to catch any NA data
+    try: 
+      dates.append(entry[0])
+      # remove the space between the numbers 
+      curr_dose = entry[1]
+      curr_dose = re.sub('\s+', '', curr_dose)
+      doses = np.append(doses, curr_dose)
+    except: 
+      print("Caught error for entry: ")
+      print(entry)
+      print("Date is not a number. Will not append.")
 
   # append the new list to the existing data  
   # convert the new dates to the proper format
