@@ -169,25 +169,35 @@ def scheduled_update():
 
   # populate the dates list
   for entry in data:
+    print(entry)
     # put in try-catch to catch any NA data
-    try: 
+    print("Checking if is Nan:")
+    print(entry[1].isnumeric())
+    if (entry[1].isnumeric() == True): 
       dates.append(entry[0])
       # remove the space between the numbers 
       curr_dose = entry[1]
       curr_dose = re.sub('\s+', '', curr_dose)
       doses = np.append(doses, curr_dose)
-    except: 
-      print("Caught error for entry: ")
+    elif (entry[1] == '342 (2 day total)'):
+      print("we've entered this if statement for entry")
       print(entry)
-      print("Date is not a number. Will not append.")
+      dates.append(entry[0])
+      curr_dose = 342
+      doses = np.append(doses, curr_dose)
+    else: 
+      print("Entry is not a number. Ignoring this entry:")
+      print(entry)
 
   # append the new list to the existing data  
   # convert the new dates to the proper format
   new_dates = list(map(convert_date, dates))
   # merge the last_similar doses and dates 
   merged_dates = append_last_similar_dates(vaccine_dates, new_dates, last_similar(vaccine_dates, new_dates))
-  # convert the vaccine doses to integers
+  # convert the vaccine doses to integer
   vaccine_totals = vaccine_totals.astype(int)
+  print("VACCINE DOSES:")
+  print(doses)
   doses = doses.astype(int)
   merged_totals = append_last_similar_values(vaccine_totals, doses, last_similar(vaccine_totals, doses))
 
@@ -215,7 +225,6 @@ def scheduled_update():
     WHITE = '#FFFFFF'
     plt.rc('font', family='sans-serif')
     fig, ax = plt.subplots()
-    n = vaccine_totals.max()
     # yticks = np.arange(0, n, 500)
     fig.set_size_inches(6, 3)
     # ax.bar(dates, vaccine_totals, color = '#39ff14')
