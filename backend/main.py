@@ -49,13 +49,21 @@ def index():
 
   dates = []
   totals = []
+
   for line in fobj:
     split_line_list = line.split('&')
     date_var = split_line_list[0].strip()
-    dose_var = int(split_line_list[1].strip())
-    dates.append(date_var)
-    totals.append(dose_var)
-  
+    dose_var = split_line_list[1].strip()
+    print(dose_var)
+    try: 
+      dose_var = int(dose_var)
+      dates.append(date_var)
+      totals.append(dose_var)
+    except:
+      print("Not a number. Will not plot data for this date.")
+
+  print(dates)
+
   cumulative_doses = 0
   for number in totals:
     cumulative_doses += number
@@ -113,8 +121,11 @@ def scheduled_update():
     curr_date = curr_date.strip()
     curr_count = day.split("&")[1]
     # append the current date and count to the existing arrays and lists
-    vaccine_totals = np.append(vaccine_totals, int(curr_count))
-    vaccine_dates.append(curr_date)
+    try: 
+      vaccine_totals = np.append(vaccine_totals, int(curr_count))
+      vaccine_dates.append(curr_date)
+    except:
+      print("Entry is not a number. Skipping this date.")
 
 
   def process_date(unprocessed_dates):
@@ -220,9 +231,9 @@ def scheduled_update():
     # ax.set_facecolor('#222222')
     if (download_plot == True):
       plt.savefig("data.png", bbox_inches = 'tight', pad_inches = 0.05, dpi=150)
+    # close the plot
     plt.close('all')
     return 
-    # close the plot
     
   plot_vaccine(merged_totals, merged_dates, True)
   
@@ -241,4 +252,5 @@ def hello():
 
 
 web_site.run(host='0.0.0.0', port=PORT)
+# web_site.run(host='0.0.0.0', port=8080)
 
