@@ -2,7 +2,7 @@ let count = 0;
 
 function updateCount() {
   count++;
-  if (count >= 3) {
+  if (count >= 2) {
     document.querySelector('main').hidden = false;
   }
 }
@@ -15,11 +15,6 @@ if (location.protocol === "https:") {
 window.addEventListener('load', () => {
   console.log('The page has fully loaded');
   handleClick() 
-  document.fonts.ready.then(() => {
-    if (document.fonts.check('Roboto')) {
-      updateCount();
-    }
-  });
   // let button = document.getElementById("hello"); 
   // button.addEventListener("click", handleClick);
   let plot = document.getElementById('tableauOverflow');
