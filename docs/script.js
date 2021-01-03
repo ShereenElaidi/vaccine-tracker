@@ -15,11 +15,11 @@ if (location.protocol === "https:") {
 window.addEventListener('load', () => {
   console.log('The page has fully loaded');
   handleClick() 
-  document.fonts.ready = () => {
+  document.fonts.ready(() => {
     if (document.fonts.check('Roboto')) {
       updateCount();
     }
-  };
+  });
   // let button = document.getElementById("hello"); 
   // button.addEventListener("click", handleClick);
   let plot = document.getElementById('tableauOverflow');
