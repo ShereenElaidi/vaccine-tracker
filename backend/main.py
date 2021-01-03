@@ -10,6 +10,9 @@ import time
 import re
 import atexit
 from apscheduler.schedulers.background import BackgroundScheduler
+import os 
+
+PORT = os.environ["PORT"]
 
 # fix for my computer :(, since the background wasn't working locally for me
 
@@ -237,5 +240,5 @@ def hello():
 # Shut down the scheduler when exiting the app
 
 
-web_site.run(host='0.0.0.0', port=8080)
+web_site.run(host='0.0.0.0', port=PORT)
 
