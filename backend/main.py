@@ -166,28 +166,26 @@ def scheduled_update():
   data = get_new_data(DATA_URL)
   dates = list() 
   doses = np.array(list())
-
   # populate the dates list
   for entry in data:
-    print(entry)
-    # put in try-catch to catch any NA data
-    print("Checking if is Nan:")
-    print(entry[1].isnumeric())
-    if (entry[1].isnumeric() == True): 
-      dates.append(entry[0])
-      # remove the space between the numbers 
+    # first strip all the spaces 
+    if (entry[1] == 'NA'):
+      print("Entry is not a number. Ignoring the entry: ", end=' ')
+      print(entry)
+    elif (entry[1] == '342 (2 day total)'):
+      print("quebec's weird special case")
       curr_dose = entry[1]
       curr_dose = re.sub('\s+', '', curr_dose)
-      doses = np.append(doses, curr_dose)
-    elif (entry[1] == '342 (2 day total)'):
-      print("we've entered this if statement for entry")
-      print(entry)
       dates.append(entry[0])
       curr_dose = 342
       doses = np.append(doses, curr_dose)
-    else: 
-      print("Entry is not a number. Ignoring this entry:")
-      print(entry)
+      print(doses)
+    else:
+      curr_dose = entry[1]
+      curr_dose = re.sub('\s+', '', curr_dose)
+      dates.append(entry[0])
+      # remove the space between the numbers 
+      doses = np.append(doses, curr_dose)    
 
   # append the new list to the existing data  
   # convert the new dates to the proper format
@@ -196,9 +194,9 @@ def scheduled_update():
   merged_dates = append_last_similar_dates(vaccine_dates, new_dates, last_similar(vaccine_dates, new_dates))
   # convert the vaccine doses to integer
   vaccine_totals = vaccine_totals.astype(int)
-  print("VACCINE DOSES:")
-  print(doses)
   doses = doses.astype(int)
+  print(vaccine_totals)
+  print(doses)
   merged_totals = append_last_similar_values(vaccine_totals, doses, last_similar(vaccine_totals, doses))
 
 
