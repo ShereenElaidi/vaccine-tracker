@@ -15,7 +15,7 @@ if (location.protocol === "https:") {
 window.addEventListener('load', () => {
   console.log('The page has fully loaded');
   handleClick() 
-  document.fonts.ready(() => {
+  document.fonts.ready.then(() => {
     if (document.fonts.check('Roboto')) {
       updateCount();
     }
