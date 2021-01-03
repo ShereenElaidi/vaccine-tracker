@@ -15,14 +15,17 @@ if (location.protocol === "https:") {
 window.addEventListener('load', () => {
   console.log('The page has fully loaded');
   handleClick() 
-  document.fonts.onloadingdone = updateCount;
+  document.fonts.ready = () => {
+    if (document.fonts.check('Roboto')) {
+      updateCount();
+    }
+  };
   // let button = document.getElementById("hello"); 
   // button.addEventListener("click", handleClick);
   let plot = document.getElementById('tableauOverflow');
   // plot.src = 'http://0.0.0.0:8080/data.png?t=' + Date.now();
   plot.src = 'http://117.9.121.34.bc.googleusercontent.com/data.png?t=' + Date.now();
   plot.onload = updateCount;
-  document.body.click();
 });
 
 
