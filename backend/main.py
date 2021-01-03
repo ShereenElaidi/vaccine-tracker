@@ -217,9 +217,9 @@ def scheduled_update():
     # ax.set_facecolor('#222222')
     if (download_plot == True):
       plt.savefig("data.png", bbox_inches = 'tight', pad_inches = 0.05, dpi=150)
+    plt.close('all')
     return 
     # close the plot
-    plt.close('all')
     
   plot_vaccine(merged_totals, merged_dates, True)
   
