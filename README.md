@@ -2,7 +2,7 @@
 What the site currently looks like: 
 ![picture of website](preview.png)
 
-Website preview: <https://vaccinetrackerfrontend.shereenelaidi.repl.co/> 
+Website demo: <http://diegolopez.me/vaccine-tracker/> 
 
 ## Instructions to Run Locally
 
