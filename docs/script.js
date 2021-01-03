@@ -1,5 +1,5 @@
 if (location.protocol === "https:") {
-  location.href = "http://"+location.hostname; 
+  location.href = "http://"+location.hostname + "/vaccine-tracker"; 
 } 
 
 window.addEventListener('load', () => {
