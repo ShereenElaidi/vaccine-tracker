@@ -172,7 +172,7 @@ def scheduled_update():
     if (entry[1] == 'NA'):
       print("Entry is not a number. Ignoring the entry: ", end=' ')
       print(entry)
-    elif (entry[1] == '342 (2 day total)'):
+    elif (entry[1] == '798 (2 day total)'):
       print("quebec's weird special case")
       curr_dose = entry[1]
       curr_dose = re.sub('\s+', '', curr_dose)
