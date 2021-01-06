@@ -170,17 +170,21 @@ def scheduled_update():
 
   for entry in data:
     print(entry[1])
-    print(entry[1] == '798 (2 days total)')
+    # checking for quebec's weird case 
+    substring = '('
     # first strip all the spaces 
     if (entry[1] == 'NA'):
       print("Entry is not a number. Ignoring the entry: ", end=' ')
       print(entry)
-    elif (entry[1] == '798 (2 days total)'):
+    elif (substring in entry[1]):
       print("quebec's weird special case")
       curr_dose = entry[1]
       curr_dose = re.sub('\s+', '', curr_dose)
       dates.append(entry[0])
-      curr_dose = 798
+      curr_dose_array = entry[1].split(" ")
+      curr_dose = curr_dose_array[0]
+      print("Current dose ", end=" ")
+      # curr_dose = 798
       doses = np.append(doses, curr_dose)
       print(doses)
     else:
