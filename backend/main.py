@@ -84,7 +84,11 @@ def index():
   # get 3 decimal points
   percentage ='%.3f'%(percentage*100)
 
-  to_print = "Cumulative vaccine doses administered: "+data[0]+" doses. Latest dose administered ("+data[2]+"): "+data[1]+" doses." 
+  # format the doses
+  cumultative_dose = str("{:,}".format(int(data[0])))
+  latest_dose = str("{:,}".format(int(data[1])))
+
+  to_print = "Cumulative vaccine doses administered: "+cumultative_dose+" doses. Latest dose administered ("+data[2]+"): "+latest_dose+" doses." 
 
   # return the cumulative vaccine doses administered to the front-end
   response = jsonify(to_print)
