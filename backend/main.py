@@ -14,6 +14,9 @@ import os
 
 PORT = os.environ["PORT"]
 
+# to get percentages
+quebec_70_pop = 573835
+
 # fix for my computer :(, since the background wasn't working locally for me
 
 plt.rcParams.update({
@@ -75,7 +78,13 @@ def index():
   # add the date corresponding to the most recent entry 
   data.append(str(dates[-1]))
 
-  to_print = "Cumulative vaccine doses administered: "+data[0]+" doses. Latest dose administered ("+data[2]+"): "+data[1]+" doses."
+  # get the percentage of the +70s vaccinated
+  percentage = int(data[0])/quebec_70_pop
+
+  # get 3 decimal points
+  percentage ='%.3f'%(percentage*100)
+
+  to_print = "Cumulative vaccine doses administered: "+data[0]+" doses. Latest dose administered ("+data[2]+"): "+data[1]+" doses." 
 
   # return the cumulative vaccine doses administered to the front-end
   response = jsonify(to_print)
@@ -243,7 +252,7 @@ def scheduled_update():
     ax.yaxis.label.set_color(WHITE)
     ax.set_yscale("linear")
     # ax.set_title("COVID-19 Vaccination Data in Québec", color = WHITE)
-    ax.set_xticks(list(map(lambda x : dates[x], range(0,len(dates),5))))
+    ax.set_xticks(list(map(lambda x : dates[x], range(0,len(dates),6))))
     ax.set_ylabel("Doses administered")
     ax.set_xlabel("Dates")
     # fig.set_facecolor('#222222')
