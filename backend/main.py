@@ -211,13 +211,21 @@ def scheduled_update():
   # convert the new dates to the proper format
   new_dates = list(map(convert_date, dates))
   # merge the last_similar doses and dates 
-  merged_dates = append_last_similar_dates(vaccine_dates, new_dates, last_similar(vaccine_dates, new_dates))
+
+  # UNCOMMENT WHEN FIXED: 
+  # merged_dates = append_last_similar_dates(vaccine_dates, new_dates, last_similar(vaccine_dates, new_dates))
   # convert the vaccine doses to integer
   vaccine_totals = vaccine_totals.astype(int)
   doses = doses.astype(int)
   print(vaccine_totals)
   print(doses)
-  merged_totals = append_last_similar_values(vaccine_totals, doses, last_similar(vaccine_totals, doses))
+  
+  # UNCOMMENT WHEN FIXED: 
+  # merged_totals = append_last_similar_values(vaccine_totals, doses, last_similar(vaccine_totals, doses))
+  
+  # temporary fix until we have time to fix the website
+  merged_totals = vaccine_totals
+  merged_dates = vaccine_dates
 
 
   def write_file(date_bank, value_bank, newfile_name):
