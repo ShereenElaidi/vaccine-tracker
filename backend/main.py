@@ -14,6 +14,17 @@ import os
 
 PORT = os.environ["PORT"]
 
+
+# the new function to convert dates with the new data source. 
+def convert_date_new(date): 
+  # split the date by - 
+  date_data = date.split("-")
+  print(date_data)
+  formatted_date = date_data[2]+ "/" + date_data[1]
+  return formatted_date 
+
+
+
 # to get percentages
 quebec_70_pop = 573835
 
@@ -27,7 +38,12 @@ plt.rcParams.update({
 
 
 
-DATA_URL = 'https://cdn-contenu.quebec.ca/cdn-contenu/sante/documents/Problemes_de_sante/covid-19/csv/synthese-7jours-en.csv'
+DATA_URL = 'https://cdn-contenu.quebec.ca/cdn-contenu/sante/documents/Problemes_de_sante/covid-19/csv/synthese-7jours-en.csv' # old data URL
+DATA_URL = 'https://cdn-contenu.quebec.ca/cdn-contenu/sante/documents/Problemes_de_sante/covid-19/csv/doses-vaccins.csv?t=1610995200' # new data URL 
+DATE_URL = 'https://cdn-contenu.quebec.ca/cdn-contenu/sante/documents/Problemes_de_sante/covid-19/csv/doses-vaccins-7jours.csv?t=1611176100'
+
+# 
+
 
 # plt.ioff() #IMPORTANT DO NOT REMOVE
 # Reads from api and outputs result
@@ -52,20 +68,23 @@ def index():
 
   dates = []
   totals = []
+  cumulatives = []
 
   for line in fobj:
     split_line_list = line.split('&')
     date_var = split_line_list[0].strip()
     dose_var = split_line_list[1].strip()
-    print(dose_var)
+    
+    # add the cumulative totals 
+    cumulative_var = split_line_list[2].strip() 
     try: 
       dose_var = int(dose_var)
       dates.append(date_var)
       totals.append(dose_var)
+      cumulatives.append(cumulative_var)
     except:
       print("Not a number. Will not plot data for this date.")
 
-  print(dates)
 
   cumulative_doses = 0
   for number in totals:
@@ -97,7 +116,10 @@ def index():
 
 def scheduled_update():
   print("scheduled process running")
-  # a function to convert the date from MONTH DAY, YEAR to DD/MM
+
+
+
+  # a function to convert the date from MONTH DAY, YEAR to DD/MM -- DEPRECIATED 
   def convert_date(date):
     date = date.lower()
     # split the string
@@ -140,46 +162,11 @@ def scheduled_update():
     except:
       print("Entry is not a number. Skipping this date.")
 
-
-  def process_date(unprocessed_dates):
-    processed_dates = list()
-    for date in unprocessed_dates:
-      new_date = convert_date(date)
-      processed_dates.append(new_date)
-    return processed_dates
-
-  # this function returns the last index of the database array where the new data is the same
-  def last_similar(database_date, new_dates):
-    for i, date in reversed(list(enumerate(new_dates))):
-      if date != database_date[-1]:
-        continue
-      else:
-        return i
-    return 'no similar index'
-
-  # returns list error if no similar index, otherwise concatenates list
-  def append_last_similar_dates(database, new, index):
-    if index == 'no similar index':
-      return 'list error'
-    extra = new[index + 1:]
-    for item in extra:
-      database.append(item)
-    return database
-
-  # returns list error if no similar index, otherwise concatenates array
-  def append_last_similar_values(array, newlist, index):
-    if index == 'no similar index':
-      return 'list error'
-    extra = newlist[index + 1:]
-    for number in extra:
-      array = np.append(array, number)
-    return array
-
   # Get the data from the quebec government's web_site
   data = get_new_data(DATA_URL)
   dates = list() 
   doses = np.array(list())
-  # populate the dates list
+
 
   for entry in data:
     print(entry[1])
@@ -205,44 +192,81 @@ def scheduled_update():
       curr_dose = re.sub('\s+', '', curr_dose)
       dates.append(entry[0])
       # remove the space between the numbers 
-      doses = np.append(doses, curr_dose)    
+      doses = np.append(doses, curr_dose)  
 
-  # append the new list to the existing data  
-  # convert the new dates to the proper format
-  new_dates = list(map(convert_date, dates))
-  # merge the last_similar doses and dates 
+  new_cumulative = data[-1][1]        # a variable to hold the NEW cumulative amount
+                                 
 
-  # UNCOMMENT WHEN FIXED: 
-  # merged_dates = append_last_similar_dates(vaccine_dates, new_dates, last_similar(vaccine_dates, new_dates))
-  # convert the vaccine doses to integer
-  vaccine_totals = vaccine_totals.astype(int)
-  doses = doses.astype(int)
-  print(vaccine_totals)
-  print(doses)
-  
-  # UNCOMMENT WHEN FIXED: 
-  # merged_totals = append_last_similar_values(vaccine_totals, doses, last_similar(vaccine_totals, doses))
-  
-  # temporary fix until we have time to fix the website
-  merged_totals = vaccine_totals
-  merged_dates = vaccine_dates
+  # read the file
+  fobj = open('vaccine_data.txt', 'r', encoding = 'utf-8')
+
+  dates = []
+  totals = []
+  cumulatives = []
+
+  for line in fobj:
+    split_line_list = line.split('&')
+    date_var = split_line_list[0].strip()
+    dose_var = split_line_list[1].strip()
+    
+    # add the cumulative totals 
+    cumulative_var = split_line_list[2].strip() 
+    try: 
+      dose_var = int(dose_var)
+      dates.append(date_var)
+      totals.append(dose_var)
+      cumulatives.append(cumulative_var)
+    except:
+      print("Not a number. Will not plot data for this date.")
+
+  fobj.close() 
 
 
-  def write_file(date_bank, value_bank, newfile_name):
+  merged_totals = totals # array to merge to 
+
+  # process new_cumulative
+  new_cumulative = int(new_cumulative.replace(" ", ""))
+
+  # turn the previous cumulative into an int
+  prev_cumulative = int(cumulatives[-1])
+
+  # check if the previous cumulative is the same as the new cumulative. If they're not the same, then append to the dates to plot. Otherwise, do nothing
+  # also append the date 
+
+
+  if (prev_cumulative < new_cumulative):
+    # get the delta dose 
+    delta_dose = new_cumulative - prev_cumulative
+    # append delta_dose
+    merged_totals.append(delta_dose)
+
+    # add to the cumulative does
+    cumulatives.append(new_cumulative)
+
+    # get the new date 
+    dates_data = get_new_data(DATE_URL)
+
+    # convert the most recent date 
+    date = convert_date_new(dates_data[0][0])
+
+    # add the date to the dates array 
+    dates.append(date)
+
+
+  def write_file(date_bank, value_bank, cumulative_bank, newfile_name):
     output_fobj = open(newfile_name, 'w', encoding = 'utf-8')
     
     lines_list = list()
     for i in range(len(date_bank)):
-      newline = str(date_bank[i]) + ' & ' + str(value_bank[i]) + '\n'
+      newline = str(date_bank[i]) + ' & ' + str(value_bank[i]) + ' & ' + str(cumulative_bank[i]) + '\n'
       lines_list.append(newline)
     
     for line in lines_list:
       output_fobj.write(line)
     output_fobj.close()
   
-  write_file(merged_dates, merged_totals, 'vaccine_data.txt')
 
-
+  write_file(dates, merged_totals, cumulatives, 'vaccine_data.txt')
 
   # a function to plot the data. Takes as input the vaccine dose count, the 
   # dates, and a boolean whether we want to display the plot, and download the plot
@@ -275,13 +299,14 @@ def scheduled_update():
     plt.close('all')
     return 
     
-  plot_vaccine(merged_totals, merged_dates, True)
+  plot_vaccine(merged_totals, dates, True)
   
 
 scheduler = BackgroundScheduler()
 scheduler.add_job(scheduled_update,'interval',seconds=30)
 scheduler.start()
 atexit.register(lambda: scheduler.shutdown(wait=False))
+
 
 
 
@@ -293,3 +318,10 @@ def hello():
 
 web_site.run(host='0.0.0.0', port=PORT)
 # web_site.run(host='0.0.0.0', port=8080)
+
+
+# DEPRECIATED FUNCTIONS FROM THE V1 WEBSITE 
+
+
+
+
