@@ -288,7 +288,7 @@ def scheduled_update():
     ax.yaxis.label.set_color(WHITE)
     ax.set_yscale("linear")
     # ax.set_title("COVID-19 Vaccination Data in Québec", color = WHITE)
-    ax.set_xticks(list(map(lambda x : dates[x], range(0,len(dates),6))))
+    ax.set_xticks(list(map(lambda x : dates[x], range(0,len(dates),12))))
     ax.set_ylabel("Doses administered")
     ax.set_xlabel("Dates")
     # fig.set_facecolor('#222222')
